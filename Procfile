@@ -1,0 +1,1 @@
+worker: node dataExporter.js

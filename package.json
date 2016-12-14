@@ -1,0 +1,21 @@
+{
+  "name": "shopify-exporter",
+  "version": "1.0.0",
+  "description": "grabs shopify data",
+  "main": "dataDump.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "shopify",
+    "api",
+    "data",
+    "export",
+    "csv"
+  ],
+  "author": "Toby Fee",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.79.0"
+  }
+}
