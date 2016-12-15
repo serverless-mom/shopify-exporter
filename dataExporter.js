@@ -46,7 +46,7 @@ var apiKey = process.env.SHOPIFY_API_KEY,
 var s3bucket = new AWS.S3({params: {Bucket: s3Bucket}});
 fs.readFile('package.json', function(err, data){
   var params = {
-    Key: 'package.json',
+    Key: 'testText.txt',
     Body: data
   }
   s3bucket.upload(params,function(err, data){
