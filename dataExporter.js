@@ -22,7 +22,7 @@ request(requestUrlBase+'customers/count.json', function (error, response, body) 
           uploadFile('customerDump.json', body);
           var customerDump = (JSON.parse(body)),
             emailDump = customerDump.customers.map(function(customer){return customer.email});
-          uploadFile('emailDump.txt', emailDump.splice(','));
+          uploadFile('emailDump.txt', emailDump.join());
         }
       })
     } else {
