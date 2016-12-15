@@ -9,11 +9,7 @@ var apiKey = process.env.SHOPIFY_API_KEY,
 
 request(requestUrlBase+'orders.json?status=any', function (error, response, body) {
   if (!error && response.statusCode == 200) {
-    fs.writeFile('datadump/orderDump.json', body, function (err) {
-      if (err) return console.log(err);
-      console.log('data has been dumped to orderDump.json');
-      uploadFile('orderDump.json');
-    });
+    uploadFile('orderDump.json', body);
   }
 });
 
@@ -23,22 +19,10 @@ request(requestUrlBase+'customers/count.json', function (error, response, body) 
     if (customerCount < 250){
       request(requestUrlBase+'customers.json?fields=email&limit=250', function (error, response, body) {
         if (!error && response.statusCode == 200) {
-              fs.writeFile('datadump/customerDump.json', body, function (err) {
-                if (err) return console.log(err);
-                console.log('Customer data has been dumped to customerDump.json');
-                uploadFile('customerDump.json');
-              });
-          var customerDump = (JSON.parse(body))
-          fs.writeFile('datadump/emailDump.txt', '', function (err) {
-            if (err) return console.log(err);
-          });
-          customerDump.customers.forEach(function(customerRecord){
-            fs.appendFile('datadump/emailDump.txt',customerRecord.email+',', function(err){
-              if (err) return console.log(err);
-            });
-          });
-          uploadFile('emailDump.txt');
-
+          uploadFile('customerDump.json', body);
+          var customerDump = (JSON.parse(body)),
+            emailDump = customerDump.customers.map(function(customer){return customer.email});
+          uploadFile('emailDump.txt', emailDump.splice(','));
         }
       })
     } else {
@@ -47,11 +31,11 @@ request(requestUrlBase+'customers/count.json', function (error, response, body) 
   }
 });
 var s3bucket = new AWS.S3({params: {Bucket: s3Bucket}});
-function uploadFile(filename){
+function uploadFile(filename, payload){
   fs.readFile('datadump/'+filename, function(err, data){
     var params = {
       Key: Date.now()+filename,
-      Body: data
+      Body: payload || 'something is up with this app and no data was available to post'
     }
     s3bucket.upload(params,function(err, data){
       if (err) {
