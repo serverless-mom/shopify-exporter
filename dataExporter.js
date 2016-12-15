@@ -52,10 +52,8 @@ fs.readFile('package.json', function(err, data){
   s3bucket.upload(params,function(err, data){
     if (err) {
         console.log('ERROR MSG: ', err);
-        res.status(500).send(err);
     } else {
         console.log('Successfully uploaded data' + data);
-        res.status(200).end();
     }
   })
 })
