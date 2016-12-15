@@ -34,7 +34,7 @@ var s3bucket = new AWS.S3({params: {Bucket: s3Bucket}});
 function uploadFile(filename, payload){
   fs.readFile('datadump/'+filename, function(err, data){
     var params = {
-      Key: Date.now()+filename,
+      Key: 'shopify-dump/'+Date.now()+filename,
       Body: payload || 'something is up with this app and no data was available to post'
     }
     s3bucket.upload(params,function(err, data){
